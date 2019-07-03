@@ -1,0 +1,103 @@
+<% include header%>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Manage Items</h1>
+            <% if(items.length !== 0){%>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <th>SKU</th>
+                    <th>Name </th>
+                    <th>Price </th>
+                    <th> Action</th>
+                </thead>
+                <tbody>
+                    <%for(const item of items){%>
+                    <tr>
+                        <!-- <td><input type="hidden" class="items-id" ><%-item._id %></td>  -->
+                        <td class="items-sku"><%-item.sku %></td>
+                        <td class="items-name"><%-item.name %></td>
+                        <td class="items-price"><%-item.price %></td>
+                        <td><a class="m-1 btn btn-primary edit" href="item/edit/<%-item._id %>" role="button">Edit
+                                item</a>
+     <a class="m-1 btn btn-danger delete" href="item/delete/<%-item._id %>" role="button">Delete item
+                            </a></td>
+                    </tr>
+                    <%} %>
+                </tbody>
+            </table>
+            <% } else{%>
+            <p>sorry no items available</p>
+            <%} %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Create item</div>
+                <div class="card-block">
+                    <form method="POST" id="form-add" action="/admin/item" autocomplete="off"><input type="hidden"
+                            name="itemId" id="itemId" value="">
+                        <div class="form-group"><label class="form-control-label" for="sku">SKU:</label><input
+                                class="form-control" id="sku" type="number" name="sku" autocomplete="off" value="">
+                        </div>
+                        <div class="form-group"><label class="form-control-label" for="name">Name:</label><input
+                                class="form-control" id="name" type="text" name="name" autocomplete="off" value="">
+                        </div>
+                        <div class="form-group"><label class="form-control-label" for="price">Price:</label><input
+                                class="form-control" id="price" type="text" name="price" autocomplete="off" value="">
+                        </div><button class="m-1 btn btn-primary" type="submit" id="submitButton">Submit</button><a
+                            class="m-1 btn btn-secondary" href="/admin/item" role="button" id="resetButton">Reset</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% include footer %>
+<script>
+    $(document).ready(function () {
+        $('#form-add').submit(function (e) {
+            e.preventDefault();
+            $.post('/admin/item',
+                {
+                    id: $('#itemId').val(),
+                    sku: $('#sku').val(),
+                    name: $('#name').val(),
+                    price: $('#price').val(),
+                    qty: '',
+                    status: 'pending'
+                });
+            window.location.reload();
+            this.reset();
+        });
+        // $('.delete').click(function (e) {
+        //     e.preventDefault();
+        //     $.ajax({
+        //         url: '/admin/item/delete/id' + $(this).closest('tr').find('.items-id').text(),
+        //         type: 'delete',
+        //         success: window.location.reload(),
+        //     });
+        // });
+        // $('.edit').click(function(e) {
+        //     e.preventDefault();
+        // let itemSku = $(this).closest('tr').find('.items-sku').text.trim();
+        // let itemName = $(this).closest('tr').find('.items-name').text.trim();
+        // let itemPrice = $(this).closest('tr').find('.items-price').text.trim();
+        // function editItem(){
+        //     document.getElementById('sku').value = itemSku;
+        //     document.getElementById('name').value = itemName;
+        //     document.getElementById('price').value = itemPrice;
+        //     //document.getElementById('sku').setAttribute('disabled', true);
+        //     document.getElementById('submitButton').innerHTML = 'Edit';
+        //     document.getElementById('resetButton').innerHTML = 'Cancel';
+        // }
+        // editItem();
+        // });
+    });
+
+
+</script>
+</body>
+
+</html>
